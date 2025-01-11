@@ -7,10 +7,13 @@ import java.io.IOException;
 
 public class OrderSensitiveTimeEncoder extends Encoder{
     byte[] lens;
+    byte[] vals;
     int valNum = 0;
     boolean isFirst = true;
     long lastValue;
-
+    int index = 0;
+    boolean isLong = false; // Determine the range of the data values
+    byte[] map;
     public OrderSensitiveTimeEncoder() {
         super(TSEncoding.ORDER_SENSITIVE_TIME);
     }
@@ -18,7 +21,13 @@ public class OrderSensitiveTimeEncoder extends Encoder{
     @Override
     public void encode(long value, ByteArrayOutputStream out){
         if (isFirst) {
-            lens = new byte[4];
+            if(isLong) {
+                map = new byte[]{-1,1,2,-1,3,-1,-1,-1,0};
+            } else {
+                map = new byte[]{1, 2, 3, -1, 0};
+            }
+            lens = new byte[1000];
+            vals = new byte[1000];
             writeBits(value, out);
             lastValue = value;
             isFirst = false;
@@ -34,6 +43,7 @@ public class OrderSensitiveTimeEncoder extends Encoder{
     @Override
     public void flush(ByteArrayOutputStream out) throws IOException {
         // flush control bits
+        out.write(vals, 0, index);
         out.write(lens,0, (valNum+3)/4);
         // flush valNum
         int byteNum = 4;
@@ -45,17 +55,31 @@ public class OrderSensitiveTimeEncoder extends Encoder{
     }
 
     public int mapDeltaToLen(long delta) {  //Provide options for lengths of 1, 2, 4, and 8
-        int newLen = 0;
-        if (delta < 0) {
-            newLen = 8;
-        } else if (delta < 256) {
-            newLen = 1;
-        } else if (delta < 65536) {
-            newLen = 2;
-        } else if (delta < (long)Integer.MAX_VALUE*2) {
-            newLen = 4;
+        int newLen;
+        if(isLong) {
+            if (delta < 0) {
+                newLen = 8;
+            } else if (delta < 256) {
+                newLen = 1;
+            } else if (delta < 65536) {
+                newLen = 2;
+            } else if (delta < (long)Integer.MAX_VALUE*2) {
+                newLen = 4;
+            } else {
+                newLen = 8;
+            }
         } else {
-            newLen = 8;
+            if (delta < 0) {
+                newLen = 4;
+            } else if (delta == 0) {
+                newLen = 0;
+            } else if (delta < 256) {
+                newLen = 1;
+            } else if (delta < 65536) {
+                newLen = 2;
+            } else {
+                newLen = 4;
+            }
         }
         return newLen;
     }
@@ -68,16 +92,21 @@ public class OrderSensitiveTimeEncoder extends Encoder{
             System.arraycopy(lens, 0, expanded, 0, lens.length);
             this.lens = expanded;
         }
-        byte temp = 0;
-        if(byteNum == 1) temp= 1;
-        if(byteNum == 2) temp = 2;
-        if(byteNum == 4) temp = 3;
+        byte temp = map[byteNum];
+//        if(byteNum == 1) temp= 1;
+//        if(byteNum == 2) temp = 2;
+//        if(byteNum == 4) temp = 3;
         lens[valNum/4] = (byte) (lens[valNum/4]|(temp<<(2*(3-valNum%4))));
         // update data bits
         while(byteNum>0) {
-            out.write((int)value);
+            vals[index] = (byte) (value & 0xFFL);
             value = value>>8;
             byteNum--;
+            index++;
+            if(index == 1000) {
+                out.write(vals, 0, vals.length);
+                index = 0;
+            }
         }
     }
 

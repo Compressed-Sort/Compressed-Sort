@@ -10,8 +10,11 @@ public class OrderSensitiveValueDecoder extends Decoder {
     int nowNum = 0;
     int totalNum = 0;
     int controlBitsOffset = 0;
+    int index = 0;
+    byte[] vals = new byte[4];
     long[] pow = new long[] {1, 256, 65536, 16777216, 4294967296L, (long) Math.pow(256, 5), (long) Math.pow(256, 6), (long) Math.pow(256, 7)};
-
+    int[] map; // map index to length
+    boolean isLong = true;  // Determine the range of the data values
 
     public OrderSensitiveValueDecoder() {
         super(TSEncoding.ORDER_SENSITIVE_VALUE);
@@ -20,6 +23,12 @@ public class OrderSensitiveValueDecoder extends Decoder {
     @Override
     public boolean hasNext(ByteBuffer buffer) throws IOException {
         if (isFirst) {
+            if(isLong) {
+                map = new int[]{8, 1, 2, 4};
+            }
+            else{
+                map = new int[]{4, 0, 1, 2};
+            }
             totalNum = readValueSize(buffer);
             controlBitsOffset = buffer.limit()-4-(totalNum+3)/4;
             isFirst = false;
@@ -59,12 +68,17 @@ public class OrderSensitiveValueDecoder extends Decoder {
     }
 
     public int readValueLen(ByteBuffer buffer){
-        byte temp = buffer.get(controlBitsOffset +nowNum/4);
-        temp = (byte) (temp>>(2*(3-nowNum%4)));
-        temp = (byte) (temp & 0x03);
-        if(temp == 0) return 8;
-        if(temp == 3) return 4;
-        return temp;
+        if(index == 0){
+            byte temp = buffer.get(controlBitsOffset +nowNum/4);
+            for(int i=0; i<4; i++) {
+                vals[3-i] = (byte) (temp & 0x03);
+                temp >>= 2;
+            }
+        }
+        byte temp = vals[index];
+        index++;
+        if(index == 4) index = 0;
+        return map[temp];
     }
 
     public long readForwardValue(int byteNum, ByteBuffer buffer) {

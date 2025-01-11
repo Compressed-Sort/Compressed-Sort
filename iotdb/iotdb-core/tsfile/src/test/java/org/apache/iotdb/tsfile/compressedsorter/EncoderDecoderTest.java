@@ -8,6 +8,8 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
+import static org.junit.Assert.assertEquals;
+
 public class EncoderDecoderTest {
     private static int ROW_NUM = 1000000;
     private static int REAPEAT_NUM = 1000;
@@ -72,7 +74,6 @@ public class EncoderDecoderTest {
         long encodeTime4 = 0;
         long encodeTime5 = 0;
 
-
         long decodeTime1 = 0;
         long decodeTime2 = 0;
         long decodeTime3 = 0;
@@ -110,6 +111,7 @@ public class EncoderDecoderTest {
         long[] times = new long[ROW_NUM];
         long[] values = new long[ROW_NUM];
         prepareData(times, values);
+        //sortTimeWithValue(times, values);
         for(int j=0; j<REAPEAT_NUM; j++) {
             // Order-Sensitive encode time
             long startTime = System.currentTimeMillis();
@@ -130,9 +132,13 @@ public class EncoderDecoderTest {
             ByteBuffer valueBuffer1 = ByteBuffer.wrap(valueCompressedData1.toByteArray());
             timeDecoder1 = new OrderSensitiveTimeDecoder();
             valueDecoder1 = new OrderSensitiveValueDecoder();
+            timeDecoder1.hasNext(timeBuffer1);
+            valueDecoder1.hasNext(valueBuffer1);
             for(int i=0; i<ROW_NUM-1; i++) {
                 timeDecoder1.readLong(timeBuffer1);
                 valueDecoder1.readLong(valueBuffer1);
+//                assertEquals(timeDecoder1.readLong(timeBuffer1), times[i]);
+//                assertEquals(valueDecoder1.readLong(valueBuffer1), values[i]);
             }
             decodeTime1 += System.currentTimeMillis()-startTime;
 
@@ -157,6 +163,8 @@ public class EncoderDecoderTest {
             for(int i=0; i<ROW_NUM-1; i++) {
                 timeDecoder2.readLong(timeBuffer2);
                 valueDecoder2.readLong(valueBuffer2);
+//                assertEquals(timeDecoder2.readLong(timeBuffer2), times[i]);
+//                assertEquals(valueDecoder2.readLong(valueBuffer2), values[i]);
             }
             decodeTime2 += System.currentTimeMillis()-startTime;
 
@@ -181,6 +189,8 @@ public class EncoderDecoderTest {
             for(int i=0; i<ROW_NUM-1; i++) {
                 timeDecoder3.readLong(buffer3);
                 valueDecoder3.readLong(valueBuffer3);
+//                assertEquals(timeDecoder3.readLong(buffer3), times[i]);
+//                assertEquals(valueDecoder3.readLong(valueBuffer3), values[i]);
             }
             decodeTime3 += System.currentTimeMillis()-startTime;
 
@@ -205,6 +215,8 @@ public class EncoderDecoderTest {
             for(int i=0; i<ROW_NUM-1; i++) {
                 timeDecoder5.readLong(buffer5);
                 valueDecoder5.readLong(valueBuffer5);
+//                assertEquals(timeDecoder5.readLong(buffer5), times[i]);
+//                assertEquals(valueDecoder5.readLong(valueBuffer5), values[i]);
             }
             decodeTime5 += System.currentTimeMillis()-startTime;
         }

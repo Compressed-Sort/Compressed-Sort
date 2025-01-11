@@ -12,8 +12,11 @@ public class OrderSensitiveTimeDecoder extends Decoder{
     int nowNum = 0;
     int totalNum = 0;
     int controlBitsOffset = 0;
+    int index = 0;
     long[] pow = new long[] {1, 256, 65536, 16777216, 4294967296L, (long) Math.pow(256, 5), (long) Math.pow(256, 6), (long) Math.pow(256, 7)};
-
+    byte[] vals = new byte[4];
+    int[] map; // map index to length
+    boolean isLong = false;
     public OrderSensitiveTimeDecoder() {
         super(TSEncoding.ORDER_SENSITIVE_TIME);
     }
@@ -21,9 +24,14 @@ public class OrderSensitiveTimeDecoder extends Decoder{
     @Override
     public boolean hasNext(ByteBuffer buffer) throws IOException {
         if (isFirst) {
+            if(isLong) {
+                map = new int[]{8, 1, 2, 4};
+            }
+            else{
+                map = new int[]{4, 0, 1, 2};
+            }
             totalNum = readValueSize(buffer);
             controlBitsOffset = buffer.limit()-4-(totalNum+3)/4;
-            isFirst = false;
             return true;
         }
         if (nowNum < totalNum){
@@ -35,7 +43,14 @@ public class OrderSensitiveTimeDecoder extends Decoder{
     @Override
     public long readLong(ByteBuffer buffer) {
         // forward decode
-        int valueLen = readValueLen(buffer);
+        int valueLen;
+        if(isFirst) {
+            isFirst = false;
+            valueLen = readValueLen(buffer);
+            valueLen = 8;
+        } else {
+            valueLen = readValueLen(buffer);
+        }
         nowValue += readForwardValueDelta(valueLen, buffer);
         nowNum++;
         return nowValue;
@@ -66,12 +81,17 @@ public class OrderSensitiveTimeDecoder extends Decoder{
     }
 
     public int readValueLen(ByteBuffer buffer){
-        byte temp = buffer.get(controlBitsOffset +nowNum/4);
-        temp = (byte) (temp>>(2*(3-nowNum%4)));
-        temp = (byte) (temp & 0x03);
-        if(temp == 0) return 8;
-        if(temp == 3) return 4;
-        return temp;
+        if(index == 0){
+            byte temp = buffer.get(controlBitsOffset +nowNum/4);
+            for(int i=0; i<4; i++) {
+                vals[3-i] = (byte) (temp & 0x03);
+                temp >>= 2;
+            }
+        }
+        byte temp = vals[index];
+        index++;
+        if(index==4) index=0;
+        return map[temp];
     }
 
     @Override

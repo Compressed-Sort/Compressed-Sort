@@ -93,7 +93,7 @@ public class CompressedMergeSorterTest {
     }
 
     @Test
-    public void testCompactionTime() throws IOException {
+    public void testMergeTime() throws IOException {
         // Test the time of the compaction method
         long[] allTimes = new long[ROW_NUM];
         long[] allValues = new long[ROW_NUM];
@@ -186,7 +186,7 @@ public class CompressedMergeSorterTest {
     }
 
     @Test
-    public void testNewCompactionMemoryPrepare() throws Exception {
+    public void testNewMemoryPrepare() throws Exception {
         long[] allTimes = new long[ROW_NUM];
         long[] allValues = new long[ROW_NUM];
         long[] timesPage1 = new long[PAGE_SIZE];
@@ -202,7 +202,7 @@ public class CompressedMergeSorterTest {
             return;
         }
         prepareData(allTimes, allValues);
-        for(int i=0; i<ROW_NUM-2*PAGE_SIZE; i++) {     // 找到第一个互相之间有overlap的page
+        for(int i=0; i<ROW_NUM-2*PAGE_SIZE; i++) {
             for (int j = 0; j < PAGE_SIZE; j++) {
                 timesPage1[j] = allTimes[i + j];
                 valuesPage1[j] = allValues[i + j];
@@ -243,7 +243,7 @@ public class CompressedMergeSorterTest {
     }
 
     @Test
-    public void testNewCompactionMemory() throws Exception {
+    public void testNewMemory() throws Exception {
         MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
         CompressedSeriesData pageData1 = null;
         CompressedSeriesData pageData2 = null;
@@ -287,7 +287,7 @@ public class CompressedMergeSorterTest {
     }
 
     @Test
-    public void testOldCompactionMemoryPrepare() throws Exception {
+    public void testOldMemoryPrepare() throws Exception {
         long[] allTimes = new long[ROW_NUM];
         long[] allValues = new long[ROW_NUM];
         long[] timesPage1 = new long[PAGE_SIZE];
@@ -335,7 +335,7 @@ public class CompressedMergeSorterTest {
         }
     }
     @Test
-    public void testOldCompactionMemory() throws Exception {
+    public void testOldMemory() throws Exception {
         MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
         ByteBuffer timeBuffer1TS_2DIFF = getByteBuffer("D:\\senior\\DQ\\research\\compressed_sort\\test\\timebuffer1.bat");
         ByteBuffer timeBuffer2TS_2DIFF = getByteBuffer("D:\\senior\\DQ\\research\\compressed_sort\\test\\timebuffer2.bat");

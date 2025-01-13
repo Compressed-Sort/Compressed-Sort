@@ -64,8 +64,8 @@ public class CompressedBubbleSorterTest {
         int[] rowNums = new int[] {10, 200000, 400000, 600000, 800000, 1000000};
         for(int i=0; i<rowNums.length; i++){
             ROW_NUM = rowNums[i];
-            //testNewSortMemory();
-            testMemoryNew();
+            //testCompressedBubbleSortMemory();
+            //testOldSortMemory();
             System.gc();
 //            synchronized (this) {
 //            try {
@@ -78,13 +78,13 @@ public class CompressedBubbleSorterTest {
     }
 
     @Test
-    public void testNewSortMemory() throws InterruptedException {
+    public void testCompressedBubbleSortMemory() throws InterruptedException {
         MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
         long[] times = new long[ROW_NUM];
         long[] values = new long[ROW_NUM];
         prepareData(times, values);
         OptionalLong maxOptional = Arrays.stream(times).max();
-        long max = maxOptional.orElseThrow(() -> new RuntimeException("数组为空，无法找出最大值"));
+        long max = maxOptional.orElseThrow(() -> new RuntimeException("The array is empty, and it is not possible to find the maximum value."));
         times[ROW_NUM - 1] = max+3000;
         OrderSensitiveTimeOperator timeEncoder = new OrderSensitiveTimeOperator(0,0,0);
         OrderSensitiveValueOperator valueEncoder = new OrderSensitiveValueOperator(0,0,0);
@@ -117,7 +117,7 @@ public class CompressedBubbleSorterTest {
     }
 
     @Test
-    public void testMemoryNew() throws IOException {
+    public void testOldSortMemory() throws IOException {
         Encoder timeEncoder = null;
         Encoder valueEncoder = null;
         MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();

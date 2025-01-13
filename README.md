@@ -18,4 +18,11 @@ User Guide for building from source could be found here: https://github.com/apac
 
 + `Compresseion performance`: all the test code for encoder performance is in `EncodeDecodeTest.java`
 + `Compressed bubble sort performance`: all the test code for Memtable sort performance is in `CompressedBubbleSorterTest.java`
+    + `prepareData()`: choose the dataset that will be used in the following test
+    + `testSortTime()`: for the specified parameters, test the sort time of different methods.
+    + `testCompressedBubbleSortMemory() & testOldSortMemory()`: for the specified parameters, test the heap usage for compressed bubble sort and other methods
 + `Compressed merge sort performance`: all the test code for Compaction sort performance is in `CompressedMergeSorterTest.java`
+    + `prepareData()`: choose the dataset that will be used in the following test
+    + `testMergeTime()`: for the specified parameters, test the merge time of different methods
+    + `testNewMemoryPrepare() & testOldMemoryPrepare()`: for the specified parameters, prepare the compressed data that will be used in the following test
+    + `testNewMemory() & testOldMemory()`: for the specified parameters, test the heap usage for compressed merge sort and other methods.

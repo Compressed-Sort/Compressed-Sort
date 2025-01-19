@@ -4,13 +4,19 @@ This is the repository for Compressed-Sort algorithm.
 
 The evaluation code is based on IoTDB.
 
-User Guide for building from source could be found here: https://github.com/apache/iotdb
+User Guide for building IoTDB from source could be found here: https://github.com/apache/iotdb
+
+User Guide for building TsFile from source could be found here: https://github.com/apache/tsfile
 
 ## File Structure
 + `iotdb/`: include the scripts and database used for evaluations
     + `OrderSensitiveTimeEncoder&OrderSensitiveValueEncoder`: the encoding method proposed in the paper
     + `CompressedBubbleSorter`: the compressed bubble sort algorithm proposed in the paper
     + `CompressedMergeSorter`: the compressed merge sort algorithm proposed in the paper
++ `tsfile/`: show the compressed-sort operator implemented for this file format
+    + `TsFileSorter`: the operator for compressed-bubble sort
+    + `UnsortedFileGenerator`: generate a file containing unordered data by specifying the dataset
+    + `SortTest`: test the compressed sort operator
 + `datasets/`: include all the public datasets used for evaluations
 
 

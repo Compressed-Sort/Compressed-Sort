@@ -890,7 +890,7 @@ public class DataRegion implements IDataRegionForQuery {
                     Long.MAX_VALUE,
                     0));
       }
-      //todo!关闭顺乱序分离后，所有数据进入乱序区
+      // todo!关闭顺乱序分离后，所有数据进入乱序区
       boolean isSequence =
           config.isEnableSeparateData()
               && insertRowNode.getTime()

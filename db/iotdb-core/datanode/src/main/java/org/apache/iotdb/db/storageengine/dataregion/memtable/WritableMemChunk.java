@@ -31,7 +31,6 @@ import org.apache.iotdb.tsfile.exception.write.UnSupportedDataTypeException;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 import org.apache.iotdb.tsfile.utils.Binary;
 import org.apache.iotdb.tsfile.utils.BitMap;
-import org.apache.iotdb.tsfile.utils.RamUsageEstimator;
 import org.apache.iotdb.tsfile.write.chunk.ChunkWriterImpl;
 import org.apache.iotdb.tsfile.write.chunk.IChunkWriter;
 import org.apache.iotdb.tsfile.write.schema.IMeasurementSchema;
@@ -47,8 +46,8 @@ import java.util.List;
 public class WritableMemChunk implements IWritableMemChunk {
 
   private IMeasurementSchema schema;
-  //private TVList list;
-  private Series list;;  //change!
+  // private TVList list;
+  private Series list;; // change!
   private static final String UNSUPPORTED_TYPE = "Unsupported data type:";
   private static final Logger LOGGER = LoggerFactory.getLogger(WritableMemChunk.class);
 
@@ -56,40 +55,40 @@ public class WritableMemChunk implements IWritableMemChunk {
 
   public WritableMemChunk(IMeasurementSchema schema) {
     this.schema = schema;
-    //this.list = TVList.newList(schema.getType());
-    //change!
-    if(CONFIG.isMemtableCompressed()) {
+    // this.list = TVList.newList(schema.getType());
+    // change!
+    if (CONFIG.isMemtableCompressed()) {
       this.list = new CompressedTVList(schema.getType());
-    } else{
+    } else {
       this.list = TVList.newList(schema.getType());
     }
   }
 
-
   public WritableMemChunk() {}
 
-  private void convert() {  //change!将compressed类型的series转成普通类型的tvlist
-    if (this.list instanceof CompressedTVList){
-        Series temp = null;
-        try {
-            temp = this.list.convert();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        this.list = temp;
+  private void convert() { // change!将compressed类型的series转成普通类型的tvlist
+    if (this.list instanceof CompressedTVList) {
+      Series temp = null;
+      try {
+        temp = this.list.convert();
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+      this.list = temp;
     }
   }
 
-  private void CompressedSort() {  //change!将compressed类型的series转成普通类型的tvlist
-    if (this.list instanceof CompressedTVList){
-        try {
-            ((CompressedTVList) this.list).convertAndSort2();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+  private void CompressedSort() { // change!将compressed类型的series转成普通类型的tvlist
+    if (this.list instanceof CompressedTVList) {
+      try {
+        ((CompressedTVList) this.list).convertAndSort2();
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
     }
-    //writeDataToTXT(new long[]{1});
+    // writeDataToTXT(new long[]{1});
   }
+
   public void writeDataToTXT(long[] data) {
     String filePath = "D:\\senior\\毕设\\画图\\实验章节\\内存压缩与不压缩flush\\list大小.txt";
     // 使用 try-with-resources 自动关闭资源
@@ -103,8 +102,6 @@ public class WritableMemChunk implements IWritableMemChunk {
       e.printStackTrace();
     }
   }
-
-
 
   @Override
   public boolean writeWithFlushCheck(long insertTime, Object objectValue) {
@@ -258,7 +255,7 @@ public class WritableMemChunk implements IWritableMemChunk {
 
   @Override
   public synchronized TVList getSortedTvListForQuery() {
-    convert(); //change!
+    convert(); // change!
     sortTVList();
     // increase reference count
     list.increaseReferenceCount();
@@ -276,20 +273,18 @@ public class WritableMemChunk implements IWritableMemChunk {
     // System.out.println(list instanceof CompressedTVList);
     // writeDataToTXT(new long[]{RamUsageEstimator.sizeOf(list)});
     if ((list.getReferenceCount() > 0 && !list.isSorted())) {
-      convert(); //change!
-      list = list.clone();  // 因为referencecount>0
+      convert(); // change!
+      list = list.clone(); // 因为referencecount>0
     }
 
-
     if (!list.isSorted()) {
-      //System.out.println("sort one list");  //change!
-      if(list instanceof CompressedTVList){
-        //System.out.println("convert one list");  //change!
-        CompressedSort(); //change!
-      } else{
+      // System.out.println("sort one list");  //change!
+      if (list instanceof CompressedTVList) {
+        // System.out.println("convert one list");  //change!
+        CompressedSort(); // change!
+      } else {
         list.sort();
       }
-
     }
   }
 
@@ -300,7 +295,7 @@ public class WritableMemChunk implements IWritableMemChunk {
 
   @Override
   public TVList getTVList() {
-    return (TVList)list;
+    return (TVList) list;
   }
 
   public CompressedTVList getTVList2() {
@@ -313,7 +308,7 @@ public class WritableMemChunk implements IWritableMemChunk {
 
   @Override
   public long count() {
-    //convert();  //change!
+    // convert();  //change!
     return list.rowCount();
   }
 
@@ -324,13 +319,13 @@ public class WritableMemChunk implements IWritableMemChunk {
 
   @Override
   public long getMaxTime() {
-    convert();  //change!
+    convert(); // change!
     return list.getMaxTime();
   }
 
   @Override
   public long getFirstPoint() {
-    convert();  //change!
+    convert(); // change!
     if (list.rowCount() == 0) {
       return Long.MAX_VALUE;
     }
@@ -339,7 +334,7 @@ public class WritableMemChunk implements IWritableMemChunk {
 
   @Override
   public long getLastPoint() {
-    convert();  //change!
+    convert(); // change!
     if (list.rowCount() == 0) {
       return Long.MIN_VALUE;
     }
@@ -350,13 +345,13 @@ public class WritableMemChunk implements IWritableMemChunk {
 
   @Override
   public boolean isEmpty() {
-    convert();  //change!
+    convert(); // change!
     return list.rowCount() == 0;
   }
 
   @Override
   public int delete(long lowerBound, long upperBound) {
-    convert();  //change!
+    convert(); // change!
     return list.delete(lowerBound, upperBound);
   }
 
@@ -367,7 +362,7 @@ public class WritableMemChunk implements IWritableMemChunk {
 
   @Override
   public String toString() {
-    convert();  //change!
+    convert(); // change!
     int size = list.rowCount();
     int firstIndex = 0;
     int lastIndex = size - 1;
@@ -401,8 +396,9 @@ public class WritableMemChunk implements IWritableMemChunk {
   @Override
   public void encode(IChunkWriter chunkWriter) {
     ChunkWriterImpl chunkWriterImpl = (ChunkWriterImpl) chunkWriter;
-    //change!之前是一个一个data编码，现在如果数据在写入的过程中已经编码，那么写入时就可以直接写入
-    if(list instanceof CompressedTVList || list instanceof CompressedLongTVList){  // 如果数据在内存中已经按照压缩方式存储
+    // change!之前是一个一个data编码，现在如果数据在写入的过程中已经编码，那么写入时就可以直接写入
+    if (list instanceof CompressedTVList
+        || list instanceof CompressedLongTVList) { // 如果数据在内存中已经按照压缩方式存储
       chunkWriterImpl.write(list.getTimeOut(), list.getValueOut(), list.getStatistics());
       chunkWriterImpl.setLastPoint(true);
       return;

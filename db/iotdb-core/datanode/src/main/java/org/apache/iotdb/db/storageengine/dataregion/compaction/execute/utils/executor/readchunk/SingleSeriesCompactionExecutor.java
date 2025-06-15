@@ -260,14 +260,14 @@ public class SingleSeriesCompactionExecutor {
    * @throws IOException if io errors occurred
    */
   private void writeChunkIntoChunkWriter(Chunk chunk) throws IOException {
-    //todo! 将数据反序列化成点
+    // todo! 将数据反序列化成点
     IChunkReader chunkReader = new ChunkReader(chunk);
     while (chunkReader.hasNextSatisfiedPage()) {
       IPointReader batchIterator = chunkReader.nextPageData().getBatchDataIterator();
       while (batchIterator.hasNextTimeValuePair()) {
         TimeValuePair timeValuePair = batchIterator.nextTimeValuePair();
         checkAndUpdatePreviousTimestamp(timeValuePair.getTimestamp());
-        //todo!在这里其实是全部数据解压之后写入的
+        // todo!在这里其实是全部数据解压之后写入的
         writeTimeAndValueToChunkWriter(timeValuePair);
         if (timeValuePair.getTimestamp() > maxEndTimestamp) {
           maxEndTimestamp = timeValuePair.getTimestamp();

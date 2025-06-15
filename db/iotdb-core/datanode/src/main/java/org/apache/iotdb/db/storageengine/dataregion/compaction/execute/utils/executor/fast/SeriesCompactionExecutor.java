@@ -244,7 +244,7 @@ public abstract class SeriesCompactionExecutor {
           || firstPageElement.needForceDecoding()) {
         // has overlap or modified pages, then deserialize it
         summary.pageOverlapOrModified += 1;
-        //todo!在这里调用解压数据的接口
+        // todo!在这里调用解压数据的接口
         if (pointPriorityReader.addNewPageIfPageNotEmpty(firstPageElement)) {
           compactWithOverlapPages();
         }
@@ -313,7 +313,7 @@ public abstract class SeriesCompactionExecutor {
    * page, it will be removed from candidate list after it has been flushing to chunk writer
    * completely.
    */
-  //todo!有乱序情况的合并策略
+  // todo!有乱序情况的合并策略
   private void compactWithOverlapPages()
       throws IOException, PageException, WriteProcessException, IllegalPathException {
     while (pointPriorityReader.hasNext()) {

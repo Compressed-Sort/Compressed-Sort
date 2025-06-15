@@ -29,7 +29,6 @@ import org.apache.iotdb.tsfile.file.metadata.statistics.Statistics;
 import org.apache.iotdb.tsfile.utils.Binary;
 import org.apache.iotdb.tsfile.utils.PublicBAOS;
 import org.apache.iotdb.tsfile.utils.ReadWriteForEncodingUtils;
-import org.apache.iotdb.tsfile.utils.TS_DELTA_data;
 import org.apache.iotdb.tsfile.write.page.PageWriter;
 import org.apache.iotdb.tsfile.write.schema.IMeasurementSchema;
 import org.apache.iotdb.tsfile.write.writer.TsFileIOWriter;
@@ -146,10 +145,13 @@ public class ChunkWriterImpl implements IChunkWriter {
     }
   }
 
-  public void write(PublicBAOS times, PublicBAOS values, Statistics<? extends Serializable> statistics) {  //change!
+  public void write(
+      PublicBAOS times,
+      PublicBAOS values,
+      Statistics<? extends Serializable> statistics) { // change!
     // 设置pagewriter的encoding方式
-    //this.pageWriter.setTimeEncoder(measurementSchema.getTimeEncoder());
-    //this.pageWriter.setValueEncoder(measurementSchema.getValueEncoder());
+    // this.pageWriter.setTimeEncoder(measurementSchema.getTimeEncoder());
+    // this.pageWriter.setValueEncoder(measurementSchema.getValueEncoder());
     pageWriter.write(times, values, statistics);
     checkPageSizeAndMayOpenANewPage();
   }
@@ -287,12 +289,10 @@ public class ChunkWriterImpl implements IChunkWriter {
     }
   }
 
-  private void writeTS_DELTA_DATAToPageBuffer() {
-
-  }
+  private void writeTS_DELTA_DATAToPageBuffer() {}
 
   private void writePageToPageBuffer() {
-    //todo:把一个page放到一个pagebuffer中
+    // todo:把一个page放到一个pagebuffer中
     try {
       if (numOfPages == 0) { // record the firstPageStatistics
         this.firstPageStatistics = pageWriter.getStatistics();

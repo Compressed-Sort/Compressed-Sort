@@ -114,15 +114,14 @@ public abstract class GorillaDecoderV2 extends Decoder {
     return value;
   }
 
-
-
   protected void flipByte(ByteBuffer in) {
     if (bitsLeft == 0) {
       buffer = in.get();
       bitsLeft = Byte.SIZE;
     }
   }
-  protected void setBuffer(byte b){
+
+  protected void setBuffer(byte b) {
     this.buffer = b;
   }
 
@@ -134,9 +133,7 @@ public abstract class GorillaDecoderV2 extends Decoder {
     this.bitsLeft = b;
   }
 
-
   public int getBitsLeft() {
     return this.bitsLeft;
   }
-
 }

@@ -122,7 +122,7 @@ public abstract class AbstractCrossCompactionWriter extends AbstractCompactionWr
 
   @Override
   public void write(TimeValuePair timeValuePair, int subTaskId) throws IOException {
-    //todo!这里写入的可能是乱序数据
+    // todo!这里写入的可能是乱序数据
     long timestamp = timeValuePair.getTimestamp();
     TsPrimitiveType value = timeValuePair.getValue();
 

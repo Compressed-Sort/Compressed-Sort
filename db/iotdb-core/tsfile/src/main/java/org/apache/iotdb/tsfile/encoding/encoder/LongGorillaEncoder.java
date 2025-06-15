@@ -71,7 +71,7 @@ public class LongGorillaEncoder extends GorillaEncoderV2 {
     }
   }
 
-  public final void copyEncode(long[]res, ByteArrayOutputStream out) {
+  public final void copyEncode(long[] res, ByteArrayOutputStream out) {
     // 通过直接插入的方式进行编码
     storedValue = res[2];
     if (firstValueWasWritten) {

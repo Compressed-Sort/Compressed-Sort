@@ -39,10 +39,10 @@ public class DoublePrecisionEncoderV2 extends LongGorillaEncoder {
     encode(Double.doubleToRawLongBits(value), out);
   }
 
-
   public final void encode(double value) {
     encode(Double.doubleToRawLongBits(value));
   }
+
   @Override
   public void flush(ByteArrayOutputStream out) {
     // ending stream

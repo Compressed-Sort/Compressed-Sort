@@ -118,17 +118,17 @@ public class ReadWriteForEncodingUtils {
    * @param buffer stream to read an unsigned var int
    * @return integer value
    */
-
   public static int readUnsignedInt(ByteBuffer buffer) {
-    //todo! 用4个byte储存一个int数据
+    // todo! 用4个byte储存一个int数据
     int value = 0;
-    int b=0;
-    for(int i=0; i<4; i++) {
+    int b = 0;
+    for (int i = 0; i < 4; i++) {
       b = buffer.get();
-      value |= (b & 0xFF)<<(8*i);
+      value |= (b & 0xFF) << (8 * i);
     }
     return value;
   }
+
   public static int readUnsignedVarInt(ByteBuffer buffer) {
     int value = 0;
     int i = 0;
@@ -161,8 +161,8 @@ public class ReadWriteForEncodingUtils {
    * @return the number of bytes that the value consume.
    */
   public static void writeUnsignedInt(int value, ByteArrayOutputStream out) {
-    //todo!把一个int数据写入buffer中
-    for(int i=0; i<4; i++) {
+    // todo!把一个int数据写入buffer中
+    for (int i = 0; i < 4; i++) {
       out.write(value & 0xFF);
       value >>>= 8;
     }

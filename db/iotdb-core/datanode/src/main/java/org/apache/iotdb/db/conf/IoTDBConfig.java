@@ -415,13 +415,13 @@ public class IoTDBConfig {
   private int avgSeriesPointNumberThreshold = 100000;
 
   /** Enable inner space compaction for sequence files */
-  private boolean enableSeqSpaceCompaction = true; //todo!关闭compaction
+  private boolean enableSeqSpaceCompaction = true; // todo!关闭compaction
 
   /** Enable inner space compaction for unsequence files */
-  private boolean enableUnseqSpaceCompaction = true; //todo!关闭compaction
+  private boolean enableUnseqSpaceCompaction = true; // todo!关闭compaction
 
   /** Compact the unsequence files into the overlapped sequence files */
-  private boolean enableCrossSpaceCompaction = true; //todo!关闭compaction
+  private boolean enableCrossSpaceCompaction = true; // todo!关闭compaction
 
   /** The buffer for sort operation */
   private long sortBufferSize = 1024 * 1024L;
@@ -456,7 +456,7 @@ public class IoTDBConfig {
    * cross space compaction, eliminate the unsequence files first BALANCE: alternate two compaction
    * types
    */
-  private CompactionPriority compactionPriority = CompactionPriority.INNER_CROSS;  //todo!修改合并优先级
+  private CompactionPriority compactionPriority = CompactionPriority.INNER_CROSS; // todo!修改合并优先级
 
   private double chunkMetadataSizeProportion = 0.1;
 
@@ -825,7 +825,7 @@ public class IoTDBConfig {
    * Separate sequence and unsequence data or not. If it is false, then all data will be written
    * into unsequence data dir.
    */
-  private boolean enableSeparateData = false;  //todo!关闭顺乱序分离功能，全部数据写入乱序区
+  private boolean enableSeparateData = false; // todo!关闭顺乱序分离功能，全部数据写入乱序区
 
   /** the method to transform device path to device id, can be 'Plain' or 'SHA256' */
   private String deviceIDTransformationMethod = "Plain";
@@ -1095,9 +1095,11 @@ public class IoTDBConfig {
   private String RateLimiterType = "FixedIntervalRateLimiter";
 
   IoTDBConfig() {}
+
   public boolean isMemtableCompressed() {
     return memtableCompressed;
   }
+
   public int getMaxLogEntriesNumPerBatch() {
     return maxLogEntriesNumPerBatch;
   }

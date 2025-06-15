@@ -62,7 +62,6 @@ public class SchemaUtils {
     intSet.add(TSEncoding.TS_DELTA);
     intSet.add(TSEncoding.BACKWARD_DELTA_OF_DELTA);
 
-
     schemaChecker.put(TSDataType.INT32, intSet);
     schemaChecker.put(TSDataType.INT64, intSet);
 
@@ -75,7 +74,6 @@ public class SchemaUtils {
     floatSet.add(TSEncoding.CHIMP);
     floatSet.add(TSEncoding.SPRINTZ);
     floatSet.add(TSEncoding.RLBE);
-
 
     schemaChecker.put(TSDataType.FLOAT, floatSet);
     schemaChecker.put(TSDataType.DOUBLE, floatSet);

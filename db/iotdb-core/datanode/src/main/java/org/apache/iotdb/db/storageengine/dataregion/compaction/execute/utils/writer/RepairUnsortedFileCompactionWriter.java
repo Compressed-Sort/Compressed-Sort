@@ -55,7 +55,7 @@ public class RepairUnsortedFileCompactionWriter extends ReadPointInnerCompaction
     }
     // remove duplicate timestamp and sort
 
-    //todo!在这里对获得的tsfile里面的时间序列的点进行排序
+    // todo!在这里对获得的tsfile里面的时间序列的点进行排序
     dataOfCurrentSeries.sort(Comparator.comparingLong(TimeValuePair::getTimestamp));
     TimeValuePair previousTimeValuePair = dataOfCurrentSeries.get(0);
     for (TimeValuePair timeValuePair : dataOfCurrentSeries) {

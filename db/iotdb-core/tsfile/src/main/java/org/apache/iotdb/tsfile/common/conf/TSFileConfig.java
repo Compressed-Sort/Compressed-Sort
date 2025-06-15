@@ -75,11 +75,11 @@ public class TSFileConfig implements Serializable {
   public static final int ARRAY_CAPACITY_THRESHOLD = 1000;
   /** Memory size threshold for flushing to disk, default value is 128MB. */
   private int groupSizeInByte = 128 * 1024 * 1024;
-  //todo!:一个page默认大小只有64KB
+  // todo!:一个page默认大小只有64KB
   /** The memory size for each series writer to pack page, default value is 64KB. */
   private int pageSizeInByte = 64 * 1024;
   /** The maximum number of data points in a page, default value is 10000. */
-  //todo!:一个page里面默认只能有一万个点
+  // todo!:一个page里面默认只能有一万个点
   private int maxNumberOfPointsInPage = 10_000;
   /** The maximum degree of a metadataIndex node, default value is 256. */
   private int maxDegreeOfIndexNode = 256;

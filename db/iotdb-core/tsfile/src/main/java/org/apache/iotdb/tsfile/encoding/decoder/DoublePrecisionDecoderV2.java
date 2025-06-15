@@ -42,7 +42,6 @@ public class DoublePrecisionDecoderV2 extends LongGorillaDecoder {
     return Double.longBitsToDouble(readLong(in));
   }
 
-
   @Override
   protected long cacheNext(ByteBuffer in) {
     readNext(in);

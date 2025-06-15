@@ -78,12 +78,16 @@ public class PageWriter {
   }
 
   /** write a time value pair into encoder */
-  public void write(PublicBAOS times, PublicBAOS values, Statistics<? extends Serializable> statistics) {  //change!
-    //todo!可能会用到的函数和功能
+  public void write(
+      PublicBAOS times,
+      PublicBAOS values,
+      Statistics<? extends Serializable> statistics) { // change!
+    // todo!可能会用到的函数和功能
     timeOut = times;
     valueOut = values;
     this.statistics = statistics;
   }
+
   public void write(long time, boolean value) {
     timeEncoder.encode(time, timeOut);
     valueEncoder.encode(value, valueOut);
@@ -199,8 +203,8 @@ public class PageWriter {
    * @return a new readable ByteBuffer whose position is 0.
    */
   public ByteBuffer getUncompressedBytes() throws IOException {
-    //todo!把时间和数值的byte集合到一起
-    //todo!可能需要更改，将长度数组的长度也要写入
+    // todo!把时间和数值的byte集合到一起
+    // todo!可能需要更改，将长度数组的长度也要写入
     prepareEndWriteOnePage();
     ByteBuffer buffer = ByteBuffer.allocate(timeOut.size() + valueOut.size() + 4);
     ReadWriteForEncodingUtils.writeUnsignedVarInt(timeOut.size(), buffer);

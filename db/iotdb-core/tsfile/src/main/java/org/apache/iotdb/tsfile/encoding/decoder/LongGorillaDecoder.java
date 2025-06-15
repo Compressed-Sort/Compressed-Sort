@@ -62,7 +62,7 @@ public class LongGorillaDecoder extends GorillaDecoderV2 {
     if (!firstValueWasRead) {
       flipByte(in);
       storedValue = readLong(VALUE_BITS_LENGTH_64BIT, in);
-      storedValues = new long[]{64,storedValue,storedValue};
+      storedValues = new long[] {64, storedValue, storedValue};
       firstValueWasRead = true;
       returnValues = storedValues;
     }
@@ -114,9 +114,9 @@ public class LongGorillaDecoder extends GorillaDecoderV2 {
 
     for (int i = 0; i < maxBits; i++) {
       storedValues[0]++;
-      storedValues[1]<<= 1;
+      storedValues[1] <<= 1;
       if (readBit(in)) {
-        storedValues[1]|= 0x01;
+        storedValues[1] |= 0x01;
       } else {
         break;
       }
@@ -127,14 +127,14 @@ public class LongGorillaDecoder extends GorillaDecoderV2 {
     // 开始读取数据
     readNextClearBit2(2, in);
 
-    switch ((int)storedValues[1]) {
+    switch ((int) storedValues[1]) {
       case 3: // case '11': use new leading and trailing zeros
         storedLeadingZeros = (int) readLong(LEADING_ZERO_BITS_LENGTH_64BIT, in);
         storedValues[1] <<= LEADING_ZERO_BITS_LENGTH_64BIT;
         storedValues[1] |= storedLeadingZeros;
         storedValues[0] += LEADING_ZERO_BITS_LENGTH_64BIT;
         byte significantBits = (byte) readLong(MEANINGFUL_XOR_BITS_LENGTH_64BIT, in);
-        storedValues[1] <<=  MEANINGFUL_XOR_BITS_LENGTH_64BIT;
+        storedValues[1] <<= MEANINGFUL_XOR_BITS_LENGTH_64BIT;
         storedValues[1] |= significantBits;
         storedValues[0] += MEANINGFUL_XOR_BITS_LENGTH_64BIT;
         significantBits++;
@@ -142,7 +142,7 @@ public class LongGorillaDecoder extends GorillaDecoderV2 {
         // missing break is intentional, we want to overflow to next one
       case 2: // case '10': use stored leading and trailing zeros
         long xor = readLong(VALUE_BITS_LENGTH_64BIT - storedLeadingZeros - storedTrailingZeros, in);
-        storedValues[1] <<=  VALUE_BITS_LENGTH_64BIT - storedLeadingZeros - storedTrailingZeros;
+        storedValues[1] <<= VALUE_BITS_LENGTH_64BIT - storedLeadingZeros - storedTrailingZeros;
         storedValues[1] |= xor;
         storedValues[0] += VALUE_BITS_LENGTH_64BIT - storedLeadingZeros - storedTrailingZeros;
         xor <<= storedTrailingZeros;

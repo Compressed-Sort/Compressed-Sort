@@ -109,7 +109,7 @@ public class PageReader implements IPageReader {
    * @param pageData uncompressed bytes size of time column, time column, value column
    */
   private void splitDataToTimeStampAndValue(ByteBuffer pageData) {
-    //todo!将长的压缩序列划分到时间列和数值列
+    // todo!将长的压缩序列划分到时间列和数值列
     int timeBufferLength = ReadWriteForEncodingUtils.readUnsignedVarInt(pageData);
 
     timeBuffer = pageData.slice();
@@ -171,7 +171,7 @@ public class PageReader implements IPageReader {
     return pageData.flip();
   }
 
-  //todo:在这里对编码的数据解压
+  // todo:在这里对编码的数据解压
   @Override
   public TsBlock getAllSatisfiedData() throws IOException {
     TsBlockBuilder builder;

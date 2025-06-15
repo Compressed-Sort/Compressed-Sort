@@ -43,7 +43,7 @@ import java.util.concurrent.Callable;
  * compaction and unseq inner space compaction.
  */
 
-//todo!对于乱序序列的合并有用
+// todo!对于乱序序列的合并有用
 public class ReadPointPerformerSubTask implements Callable<Void> {
   @SuppressWarnings("squid:1068")
   private static final Logger logger =

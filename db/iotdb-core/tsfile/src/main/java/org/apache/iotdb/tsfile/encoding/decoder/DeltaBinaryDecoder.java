@@ -243,6 +243,5 @@ public abstract class DeltaBinaryDecoder extends Decoder {
     public void reset() {
       // do nothing
     }
-
   }
 }

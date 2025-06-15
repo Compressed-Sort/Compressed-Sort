@@ -23,7 +23,6 @@ import org.apache.iotdb.commons.exception.MetadataException;
 import org.apache.iotdb.commons.path.AlignedPath;
 import org.apache.iotdb.commons.path.MeasurementPath;
 import org.apache.iotdb.commons.path.PartialPath;
-import org.apache.iotdb.db.conf.IoTDBDescriptor;
 import org.apache.iotdb.db.exception.StorageEngineException;
 import org.apache.iotdb.db.queryengine.execution.fragment.FragmentInstanceContext;
 import org.apache.iotdb.db.storageengine.dataregion.compaction.execute.performer.impl.FastCompactionPerformer;
@@ -80,10 +79,10 @@ public class FastInnerCompactionPerformerTest extends AbstractCompactionTest {
   public void setUp()
       throws IOException, WriteProcessException, MetadataException, InterruptedException {
     super.setUp();
-    //todo!修改默认配置？
-//    IoTDBDescriptor.getInstance().getConfig().setTargetChunkSize(512);
-//    IoTDBDescriptor.getInstance().getConfig().setTargetChunkPointNum(100);
-//    TSFileDescriptor.getInstance().getConfig().setMaxNumberOfPointsInPage(10);
+    // todo!修改默认配置？
+    //    IoTDBDescriptor.getInstance().getConfig().setTargetChunkSize(512);
+    //    IoTDBDescriptor.getInstance().getConfig().setTargetChunkPointNum(100);
+    //    TSFileDescriptor.getInstance().getConfig().setMaxNumberOfPointsInPage(10);
   }
 
   @After
@@ -508,15 +507,15 @@ public class FastInnerCompactionPerformerTest extends AbstractCompactionTest {
       }
     }
   }
-/*
-  Total 3 unseq files, each file has different nonAligned timeseries.
-  First file: d0 and s0, time range is 0 ~ 99, value range is  0 ~ 99.
-  Third file: d0 and s0, time range is 150 ~ 199, value range is 150 ~ 199.
-*/
+  /*
+    Total 3 unseq files, each file has different nonAligned timeseries.
+    First file: d0 and s0, time range is 0 ~ 99, value range is  0 ~ 99.
+    Third file: d0 and s0, time range is 150 ~ 199, value range is 150 ~ 199.
+  */
   @Test
   public void testUnSeqInnerSpaceCompactionWithDifferentTimeseriesEasy() throws Exception {
-    //现在是100个点写了10个page，每个page里面10个点
-    //能不能把所有的点写道一个page里面？
+    // 现在是100个点写了10个page，每个page里面10个点
+    // 能不能把所有的点写道一个page里面？
     registerTimeseriesInMManger(1, 1, false);
     createFiles(1, 1, 1, 100, 0, 0, 50, 50, false, false);
     createFiles(1, 1, 1, 100, 50, 50, 50, 50, false, false);
@@ -526,8 +525,8 @@ public class FastInnerCompactionPerformerTest extends AbstractCompactionTest {
     tsFileManager.addAll(seqResources, true);
     tsFileManager.addAll(unseqResources, false);
     InnerSpaceCompactionTask task =
-            new InnerSpaceCompactionTask(
-                    0, tsFileManager, unseqResources, false, new FastCompactionPerformer(false), 0);
+        new InnerSpaceCompactionTask(
+            0, tsFileManager, unseqResources, false, new FastCompactionPerformer(false), 0);
     Assert.assertTrue(task.start());
     Assert.assertEquals(0, FileReaderManager.getInstance().getClosedFileReaderMap().size());
     Assert.assertEquals(0, FileReaderManager.getInstance().getUnclosedFileReaderMap().size());
@@ -536,29 +535,29 @@ public class FastInnerCompactionPerformerTest extends AbstractCompactionTest {
     for (int i = 0; i < 9; i++) {
       for (int j = 0; j < 9; j++) {
         PartialPath path =
-                new MeasurementPath(
-                        COMPACTION_TEST_SG + PATH_SEPARATOR + "d" + i,
-                        "s" + j,
-                        new MeasurementSchema("s" + j, TSDataType.INT64));
+            new MeasurementPath(
+                COMPACTION_TEST_SG + PATH_SEPARATOR + "d" + i,
+                "s" + j,
+                new MeasurementSchema("s" + j, TSDataType.INT64));
 
         IDataBlockReader tsBlockReader =
-                new SeriesDataBlockReader(
-                        path,
-                        FragmentInstanceContext.createFragmentInstanceContextForCompaction(
-                                EnvironmentUtils.TEST_QUERY_CONTEXT.getQueryId()),
-                        tsFileManager.getTsFileList(true),
-                        tsFileManager.getTsFileList(false),
-                        true);
+            new SeriesDataBlockReader(
+                path,
+                FragmentInstanceContext.createFragmentInstanceContextForCompaction(
+                    EnvironmentUtils.TEST_QUERY_CONTEXT.getQueryId()),
+                tsFileManager.getTsFileList(true),
+                tsFileManager.getTsFileList(false),
+                true);
         int count = 0;
         while (tsBlockReader.hasNextBatch()) {
           TsBlock block = tsBlockReader.nextBatch();
           IBatchDataIterator iterator = block.getTsBlockSingleColumnIterator();
           while (iterator.hasNext()) {
             if ((100 <= iterator.currentTime() && iterator.currentTime() < 170)
-                    || (270 <= iterator.currentTime() && iterator.currentTime() < 340)) {
+                || (270 <= iterator.currentTime() && iterator.currentTime() < 340)) {
               assertEquals(iterator.currentTime() + 200, iterator.currentValue());
             } else if ((200 <= iterator.currentTime() && iterator.currentTime() < 270)
-                    || (370 <= iterator.currentTime() && iterator.currentTime() < 440)) {
+                || (370 <= iterator.currentTime() && iterator.currentTime() < 440)) {
               assertEquals(iterator.currentTime() + 100, iterator.currentValue());
             } else {
               assertEquals(iterator.currentTime(), iterator.currentValue());

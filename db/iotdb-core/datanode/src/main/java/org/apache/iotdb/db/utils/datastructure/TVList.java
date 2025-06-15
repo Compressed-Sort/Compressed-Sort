@@ -104,7 +104,7 @@ public abstract class TVList extends Series implements WALEntryValue {
     return sorted;
   }
 
-  public TVList convert() throws IOException{
+  public TVList convert() throws IOException {
     return this;
   }
 

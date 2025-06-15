@@ -23,7 +23,6 @@ import org.apache.iotdb.commons.path.PartialPath;
 import org.apache.iotdb.commons.path.PathPatternUtil;
 import org.apache.iotdb.db.storageengine.dataregion.wal.buffer.IWALByteBufferView;
 import org.apache.iotdb.db.storageengine.dataregion.wal.utils.WALWriteUtils;
-import org.apache.iotdb.db.utils.datastructure.DoubleTVList;
 import org.apache.iotdb.tsfile.utils.BitMap;
 import org.apache.iotdb.tsfile.utils.ReadWriteIOUtils;
 import org.apache.iotdb.tsfile.write.schema.IMeasurementSchema;
@@ -71,20 +70,20 @@ public class WritableMemChunkGroup implements IWritableMemChunkGroup {
   }
 
   private IWritableMemChunk createMemChunkIfNotExistAndGet(IMeasurementSchema schema) {
-//    if(memChunkMap.containsKey(schema.getMeasurementId())){
-//      return memChunkMap.get(schema.getMeasurementId());
-//    } else{
-//      WritableMemChunk chunk = new WritableMemChunk();
-//      chunk.UpdateSchema(schema);
-//
-//      System.out.println((chunk.getTVList2()));
-//      //WritableMemChunk chunk1 = new WritableMemChunk(schema);
-//      memChunkMap.put(schema.getMeasurementId(), chunk);
-//      System.out.println(chunk.getTVList2());
-//      return  memChunkMap.get(schema.getMeasurementId());
-//    }
+    //    if(memChunkMap.containsKey(schema.getMeasurementId())){
+    //      return memChunkMap.get(schema.getMeasurementId());
+    //    } else{
+    //      WritableMemChunk chunk = new WritableMemChunk();
+    //      chunk.UpdateSchema(schema);
+    //
+    //      System.out.println((chunk.getTVList2()));
+    //      //WritableMemChunk chunk1 = new WritableMemChunk(schema);
+    //      memChunkMap.put(schema.getMeasurementId(), chunk);
+    //      System.out.println(chunk.getTVList2());
+    //      return  memChunkMap.get(schema.getMeasurementId());
+    //    }
     return memChunkMap.computeIfAbsent(
-      schema.getMeasurementId(), k -> new WritableMemChunk(schema));
+        schema.getMeasurementId(), k -> new WritableMemChunk(schema));
   }
 
   @Override
@@ -176,8 +175,6 @@ public class WritableMemChunkGroup implements IWritableMemChunkGroup {
     // return memChunkMap.get(measurement).getTVList().rowCount();
     return memChunkMap.get(measurement).getSeries().rowCount();
   }
-
-
 
   @Override
   public long getMaxTime() {

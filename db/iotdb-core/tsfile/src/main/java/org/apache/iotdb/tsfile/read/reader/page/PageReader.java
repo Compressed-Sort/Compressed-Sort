@@ -36,6 +36,8 @@ import org.apache.iotdb.tsfile.read.filter.factory.FilterFactory;
 import org.apache.iotdb.tsfile.read.reader.IPageReader;
 import org.apache.iotdb.tsfile.read.reader.series.PaginationController;
 import org.apache.iotdb.tsfile.utils.Binary;
+import org.apache.iotdb.tsfile.utils.CompressedPageData;
+import org.apache.iotdb.tsfile.utils.PublicBAOS;
 import org.apache.iotdb.tsfile.utils.ReadWriteForEncodingUtils;
 
 import java.io.IOException;
@@ -381,5 +383,9 @@ public class PageReader implements IPageReader {
       }
     }
     return false;
+  }
+
+  public CompressedPageData getCompressedPageData() {
+    return new CompressedPageData(pageHeader, timeBuffer, valueBuffer);
   }
 }

@@ -46,6 +46,7 @@ import org.apache.iotdb.tsfile.read.reader.IPageReader;
 import org.apache.iotdb.tsfile.read.reader.IPointReader;
 import org.apache.iotdb.tsfile.read.reader.page.AlignedPageReader;
 import org.apache.iotdb.tsfile.read.reader.series.PaginationController;
+import org.apache.iotdb.tsfile.utils.CompressedPageData;
 import org.apache.iotdb.tsfile.utils.TsPrimitiveType;
 
 import java.io.IOException;
@@ -473,6 +474,34 @@ public class SeriesScanUtil {
       }
     }
     return firstPageReader != null;
+  }
+
+  public boolean hasNextUndecodedPage() throws IOException {
+    return !unSeqPageReaders.isEmpty();
+  }
+
+  public CompressedPageData nextUndecodedPage() throws IOException {
+    VersionPageReader versionPageReader = unSeqPageReaders.poll();
+    return versionPageReader.data.getCompressedPageData();
+  }
+
+  public LinkedList<CompressedPageData> allUndecodedPages() throws IOException {
+    LinkedList<CompressedPageData> compressedPageDataList = new LinkedList<>();
+    while (!unSeqPageReaders.isEmpty()) {
+      VersionPageReader versionPageReader = unSeqPageReaders.poll();
+      compressedPageDataList.add(versionPageReader.data.getCompressedPageData());
+    }
+    return compressedPageDataList;
+  }
+
+  public void getUnsequencePageReaders() throws IOException {
+    unpackOneTimeSeriesMetadata(firstTimeSeriesMetadata);
+    while(unSeqTimeSeriesMetadata.size() > 0) {
+      unpackOneTimeSeriesMetadata(unSeqTimeSeriesMetadata.poll());
+    }
+    while (cachedChunkMetadata.size() > 0) {
+      unpackOneChunkMetaData(cachedChunkMetadata.poll());
+    }
   }
 
   private boolean isExistOverlappedPage() throws IOException {

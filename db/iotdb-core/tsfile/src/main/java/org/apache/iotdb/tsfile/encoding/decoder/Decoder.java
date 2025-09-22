@@ -182,6 +182,20 @@ public abstract class Decoder {
           default:
             throw new TsFileDecodingException(String.format(ERROR_MSG, encoding, dataType));
         }
+      case ORDER_SENSITIVE_TIME:
+        switch (dataType) {
+          case INT64:
+            return new OrderSensitiveTimeDecoder();
+          default:
+            throw new TsFileDecodingException(String.format(ERROR_MSG, encoding, dataType));
+        }
+      case ORDER_SENSITIVE_VALUE:
+        switch (dataType) {
+          case INT64:
+            return new OrderSensitiveValueDecoder();
+          default:
+            throw new TsFileDecodingException(String.format(ERROR_MSG, encoding, dataType));
+        }
       default:
         throw new TsFileDecodingException(String.format(ERROR_MSG, encoding, dataType));
     }

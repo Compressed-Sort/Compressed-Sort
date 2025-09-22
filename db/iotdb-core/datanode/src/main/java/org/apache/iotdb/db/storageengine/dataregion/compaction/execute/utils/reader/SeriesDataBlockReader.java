@@ -33,9 +33,11 @@ import org.apache.iotdb.db.storageengine.dataregion.tsfile.TsFileResource;
 import org.apache.iotdb.tsfile.read.common.block.TsBlock;
 
 import com.google.common.collect.Sets;
+import org.apache.iotdb.tsfile.utils.CompressedPageData;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -143,12 +145,43 @@ public class SeriesDataBlockReader implements IDataBlockReader {
   }
 
   @Override
+  public boolean hasNextUndecodedBatch() throws IOException {
+    if(seriesScanUtil.hasNextFile()) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  public LinkedList<CompressedPageData> allUndecodedBatches() throws IOException {
+    if (seriesScanUtil.hasNextFile()) {
+      seriesScanUtil.getUnsequencePageReaders();
+      //return null;
+    } else {
+      throw new IOException("no next file");
+    }
+    return seriesScanUtil.allUndecodedPages();
+  }
+
+  @Override
   public TsBlock nextBatch() throws IOException {
     if (hasCachedBatchData || hasNextBatch()) {
       hasCachedBatchData = false;
       return tsBlock;
     }
     throw new IOException("no next block");
+  }
+
+  @Override
+  public LinkedList<CompressedPageData> nextUndecodedBatches() throws IOException {
+    if (seriesScanUtil.hasNextFile()) {
+      seriesScanUtil.getUnsequencePageReaders();
+      //return null;
+    } else {
+      throw new IOException("no next file");
+    }
+    return seriesScanUtil.allUndecodedPages();
   }
 
   @Override
@@ -165,6 +198,8 @@ public class SeriesDataBlockReader implements IDataBlockReader {
     return false;
   }
 
+
+
   private boolean readPageData() throws IOException {
     while (seriesScanUtil.hasNextPage()) {
       tsBlock = seriesScanUtil.nextPage();
@@ -172,6 +207,10 @@ public class SeriesDataBlockReader implements IDataBlockReader {
         return true;
       }
     }
+    return false;
+  }
+
+  private boolean readUndecodedPageData() throws IOException {
     return false;
   }
 

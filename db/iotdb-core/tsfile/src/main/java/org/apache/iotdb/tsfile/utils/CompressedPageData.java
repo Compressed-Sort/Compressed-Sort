@@ -1,5 +1,9 @@
 package org.apache.iotdb.tsfile.utils;
 
+import org.apache.iotdb.tsfile.file.header.PageHeader;
+
+import java.nio.ByteBuffer;
+
 public class CompressedPageData {
   TS_DELTA_data timeData;
   TS_DELTA_data valueData;
@@ -19,6 +23,25 @@ public class CompressedPageData {
     this.isInSorter = true;
     this.pageTimeLen = t.getLen();
     this.pageValueLen = v.getLen();
+  }
+
+  public CompressedPageData(PageHeader pageHeader, ByteBuffer timeBuffer, ByteBuffer valueBuffer) {
+    this.count = (int) pageHeader.getStatistics().getCount();
+    this.minTime = pageHeader.getStatistics().getStartTime();
+    this.maxTime = pageHeader.getStatistics().getEndTime();
+    this.timeData = getDataFromBuffer(timeBuffer);
+    this.valueData = getDataFromBuffer(valueBuffer);
+    this.isInSorter = true;
+    this.pageTimeLen = this.timeData.getLen();
+    this.pageValueLen = this.valueData.getLen();
+  }
+
+  private TS_DELTA_data getDataFromBuffer(ByteBuffer buffer) {
+    byte[] vals = new byte[buffer.limit()-buffer.position()-4-(count+3)/4];
+    byte[] lens = new byte[(count+3)/4];
+    buffer.get(vals,0,vals.length);
+    buffer.get(lens,0,lens.length);
+    return new TS_DELTA_data(vals, lens);
   }
 
   public boolean getIsInSorter() {

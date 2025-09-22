@@ -66,4 +66,12 @@ public class TS_DELTA_data {
     lens = newLen;
     vals = newVals;
   }
+
+  public byte[] getVals(){
+    return vals;
+  }
+
+  public byte[] getLens(){
+    return lens;
+  }
 }

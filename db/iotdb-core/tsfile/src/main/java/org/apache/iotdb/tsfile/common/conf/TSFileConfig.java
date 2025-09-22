@@ -93,14 +93,14 @@ public class TSFileConfig implements Serializable {
    * Encoder of time column, TsFile supports TS_2DIFF, PLAIN and RLE(run-length encoding) Default
    * value is TS_2DIFF.
    */
-  private String timeEncoding = "TS_2DIFF";
+  private String timeEncoding = "ORDER_SENSITIVE_TIME";
   /**
    * Encoder of value series. default value is PLAIN. For int, long data type, TsFile also supports
    * TS_2DIFF, REGULAR, GORILLA and RLE(run-length encoding). For float, double data type, TsFile
    * also supports TS_2DIFF, RLE(run-length encoding) and GORILLA. For text data type, TsFile only
    * supports PLAIN.
    */
-  private String valueEncoder = "PLAIN";
+  private String valueEncoder = "ORDER_SENSITIVE_VALUE";
   /** Default bit width of RLE encoding is 8. */
   private int rleBitWidth = 8;
   /** Default block size of two-diff. delta encoding is 128. */
@@ -114,7 +114,7 @@ public class TSFileConfig implements Serializable {
   /** Default DFT satisfy rate is 0.1 */
   private double dftSatisfyRate = 0.1;
   /** Data compression method, TsFile supports UNCOMPRESSED, SNAPPY, ZSTD or LZ4. */
-  private CompressionType compressor = CompressionType.LZ4;
+  private CompressionType compressor = CompressionType.UNCOMPRESSED;
   /** Line count threshold for checking page memory occupied size. */
   private int pageCheckSizeThreshold = 100;
   /** Default endian value is BIG_ENDIAN. */

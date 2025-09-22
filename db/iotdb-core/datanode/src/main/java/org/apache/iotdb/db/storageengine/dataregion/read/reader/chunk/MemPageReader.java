@@ -33,6 +33,7 @@ import org.apache.iotdb.tsfile.read.filter.basic.Filter;
 import org.apache.iotdb.tsfile.read.filter.factory.FilterFactory;
 import org.apache.iotdb.tsfile.read.reader.IPageReader;
 import org.apache.iotdb.tsfile.read.reader.series.PaginationController;
+import org.apache.iotdb.tsfile.utils.CompressedPageData;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -199,6 +200,11 @@ public class MemPageReader implements IPageReader {
   @Override
   public void setLimitOffset(PaginationController paginationController) {
     this.paginationController = paginationController;
+  }
+
+  @Override
+  public CompressedPageData getCompressedPageData() {
+    return null;
   }
 
   @Override

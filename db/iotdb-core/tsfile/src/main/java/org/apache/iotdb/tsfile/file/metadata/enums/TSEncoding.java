@@ -39,7 +39,9 @@ public enum TSEncoding {
   BACKWARD_DELTA_OF_DELTA((byte) 15),
   TS_DELTA((byte) 16),
   VARLONG((byte) 17),
-  VAR_DELTA_LONG((byte) 18);
+  VAR_DELTA_LONG((byte) 18),
+  ORDER_SENSITIVE_TIME((byte) 19),
+  ORDER_SENSITIVE_VALUE((byte) 20);
   private final byte type;
 
   TSEncoding(byte type) {
@@ -90,6 +92,10 @@ public enum TSEncoding {
         return TSEncoding.BACKWARD_DELTA_OF_DELTA;
       case 16:
         return TSEncoding.TS_DELTA;
+      case 19:
+        return TSEncoding.ORDER_SENSITIVE_TIME;
+      case 20:
+        return TSEncoding.ORDER_SENSITIVE_VALUE;
       default:
         throw new IllegalArgumentException("Invalid input: " + encoding);
     }

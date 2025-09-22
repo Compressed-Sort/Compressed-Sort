@@ -33,6 +33,7 @@ import org.apache.iotdb.tsfile.read.filter.basic.Filter;
 import org.apache.iotdb.tsfile.read.reader.IPageReader;
 import org.apache.iotdb.tsfile.read.reader.IPointReader;
 import org.apache.iotdb.tsfile.read.reader.series.PaginationController;
+import org.apache.iotdb.tsfile.utils.CompressedPageData;
 import org.apache.iotdb.tsfile.utils.TsPrimitiveType;
 
 import java.io.IOException;
@@ -413,6 +414,11 @@ public class AlignedPageReader implements IPageReader {
   @Override
   public void setLimitOffset(PaginationController paginationController) {
     this.paginationController = paginationController;
+  }
+
+  @Override
+  public CompressedPageData getCompressedPageData() {
+    return null;
   }
 
   @Override

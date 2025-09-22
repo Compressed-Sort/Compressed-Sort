@@ -20,13 +20,19 @@
 package org.apache.iotdb.db.storageengine.dataregion.compaction.execute.utils.reader;
 
 import org.apache.iotdb.tsfile.read.common.block.TsBlock;
+import org.apache.iotdb.tsfile.utils.CompressedPageData;
 
 import java.io.IOException;
+import java.util.LinkedList;
 
 public interface IDataBlockReader {
   boolean hasNextBatch() throws IOException;
 
+  boolean hasNextUndecodedBatch() throws IOException;
+
   TsBlock nextBatch() throws IOException;
+
+  LinkedList<CompressedPageData> nextUndecodedBatches() throws IOException;
 
   void close() throws IOException;
 }

@@ -18,7 +18,10 @@ User Guide for building TsFile from source could be found here: https://github.c
     + `UnsortedFileGenerator`: generate a file containing unordered data by specifying the dataset
     + `SortTest`: test the compressed sort operator
 + `datasets/`: include all the public datasets used for evaluations
-
+    + `Samsung`: This dataset is generated using standard commercial protocols, networks, and devices commonly found in IoT applications, corresponding to several real-world usage scenarios.
+    + `CarNet`: This is a vehicle dataset from our industrial partner that contains data from over 7 million vehicles of a specific brand during real-world operation, totaling over 200 million time series. 
+    + `ShipNet`: This dataset, obtained from the U.S. Coast Guard’s AIS network, contains historical vessel traffic data. It includes information on vessel location, time, and characteristics, and is formatted for analysis in geographic information system software.
+    + `Exponential`: This is an artificial dataset in which we use 1 as the time interval of occurrence and an exponential distribution with a parameter of 1 to simulate delays in the time transmission process. For the value column, we generated random values uniformly distributed between -100 and 100.
 
 ## Steps
 

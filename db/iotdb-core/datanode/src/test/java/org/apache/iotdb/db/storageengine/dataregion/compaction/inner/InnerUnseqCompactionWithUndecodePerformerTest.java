@@ -28,8 +28,8 @@ import java.util.List;
 import java.util.Map;
 
 public class InnerUnseqCompactionWithUndecodePerformerTest {
-    static String inputFile1 = "D:\\senior\\DQ\\research\\compressed_sort_paper\\code\\vldb25\\tsfile_segment_data\\10001-10001-0-0.tsfile";
-    static String inputFile2 = "D:\\senior\\DQ\\research\\compressed_sort_paper\\code\\vldb25\\tsfile_segment_data\\10002-10002-0-0.tsfile";
+    static String inputFile1 = "../../../datasets/testData/10001-10001-0-0.tsfile";
+    static String inputFile2 = "../../../datasets/testData/10002-10002-0-0.tsfile";
     static TsFileResource inputResource1;
     static TsFileResource inputResource2;
     static List<Long> originalTimes = new ArrayList<>();
@@ -81,7 +81,7 @@ public class InnerUnseqCompactionWithUndecodePerformerTest {
         sortTimeWithValue(originalTimes, originalValues);
         int countTotal = getDataFromTsFile(targetTsFileResource, mergedTimes, mergedValues);
         System.out.println("合并后总计: " + countTotal + " 条数据");
-        for(int i = 0; i < originalTimes.size(); i++) {
+        for(int i = 0; i < countTotal; i++) {
             boolean equal = originalTimes.get(i).equals(mergedTimes.get(i))
                     && originalValues.get(i).equals(mergedValues.get(i));
             assert equal : "数据不一致, 出错位置: " + i

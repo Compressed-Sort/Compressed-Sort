@@ -40,7 +40,7 @@ import java.util.Scanner;
 
 public class TsFilegenerator {
     private static final Logger LOG = LoggerFactory.getLogger(TsFilegenerator.class);
-    public static String outputDataFile = "D:\\senior\\DQ\\research\\compressed_sort_paper\\code\\vldb25\\tsfile_segment_data\\output.tsfile";
+    public static String outputDataFile = "../../../datasets/testData/output.tsfile";
     public static Schema schema;
     private static int ROW_COUNT = 1000;
     private static TsFileWriter innerWriter;
@@ -71,12 +71,12 @@ public class TsFilegenerator {
         if (!file.getParentFile().exists()) {
             Assert.assertTrue(file.getParentFile().mkdirs());
         }
-        inputDataFile = "D:\\senior\\DQ\\research\\compressed_sort_paper\\code\\vldb25\\tsfile_segment_data\\1.tsfile";
+        inputDataFile = "../../../datasets/testData/1.tsfile";
         file = new File(inputDataFile);
         if (!file.getParentFile().exists()) {
             Assert.assertTrue(file.getParentFile().mkdirs());
         }
-        errorOutputDataFile = "D:\\senior\\DQ\\research\\compressed_sort_paper\\code\\vldb25\\tsfile_segment_data\\2.tsfile";
+        errorOutputDataFile = "../../../datasets/testData/2.tsfile";
         file = new File(errorOutputDataFile);
         if (!file.getParentFile().exists()) {
             Assert.assertTrue(file.getParentFile().mkdirs());
@@ -196,20 +196,21 @@ public class TsFilegenerator {
 
     private static void prepareData(int beginIndex, long[] times, long[] values) {
         //samsung dataset
-        readCSV("D:/senior/DQ/research/compressed_sort_paper/dataset/real/samsung/s-10_cleaned_new.csv", beginIndex + 2, beginIndex + ROW_COUNT+1, 0, times);
-        readCSV("D:/senior/DQ/research/compressed_sort_paper/dataset/real/samsung/s-10_cleaned_new.csv", beginIndex + 2, beginIndex + ROW_COUNT+1, 1, values);
+        // absolute path: D:/senior/DQ/research/compressed_sort_paper/dataset/real/samsung/s-10_cleaned_new.csv
+        readCSV("../../../datasets/samsung.csv", beginIndex + 2, beginIndex + ROW_COUNT+1, 0, times);
+        readCSV("../../../datasets/samsung.csv", beginIndex + 2, beginIndex + ROW_COUNT+1, 1, values);
 
         //artificial dataset
-        //readCSV("D:/senior/DQ/research/compressed_sort_paper/dataset/artificial/exponential/exponential_1_1000_new_new.csv", 2, ROW_NUM+1, 0, times);
-        //readCSV("D:/senior/DQ/research/compressed_sort_paper/dataset/artificial/exponential/exponential_1_1000_new_new.csv", 2, ROW_NUM+1, 1, values);
+        //readCSV("../../../datasets/exp.csv", beginIndex + 2, beginIndex + ROW_COUNT+1, 0, times);
+        //readCSV("../../../datasets/exp.csv", beginIndex + 2, beginIndex + ROW_COUNT+1, 1, values);
 
         //carnet dataset
         //readCSV("D:/senior/DQ/research/compressed_sort_paper/dataset/real/swzl/swzl_clean.csv", 2, ROW_NUM+1, 0, times);
         //readCSV("D:/senior/DQ/research/compressed_sort_paper/dataset/real/swzl/swzl_clean.csv", 2, ROW_NUM+1, 1, values);
 
         //shipnet dataset
-        //readCSV("D:/senior/DQ/research/compressed_sort_paper/dataset/real/ship/shipNet.csv", 2, ROW_NUM+1, 1, times);
-        //readCSV("D:/senior/DQ/research/compressed_sort_paper/dataset/real/ship/shipNet.csv", 2, ROW_NUM+1, 4, values);
+        //readCSV("../../../datasets/shipNet.csv", beginIndex + 2, beginIndex + ROW_COUNT+1, 1, times);
+        //readCSV("../../../datasets/shipNet.csv", beginIndex + 2, beginIndex + ROW_COUNT+1, 4, values);
     }
 
     public static boolean readCSV(String filePath, int line_begin, int line_end, int col, long[] data) {

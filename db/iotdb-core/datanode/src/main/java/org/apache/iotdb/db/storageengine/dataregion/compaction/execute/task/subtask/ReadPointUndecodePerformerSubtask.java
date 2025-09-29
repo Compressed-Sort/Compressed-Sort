@@ -68,9 +68,14 @@ public class ReadPointUndecodePerformerSubtask implements Callable<Void> {
             if (dataBlockReader.hasNextUndecodedBatch()) {
                 compactionWriter.startMeasurement(measurementSchemas, taskId);
                 LinkedList<CompressedPageData> pageData = dataBlockReader.nextUndecodedBatches();
-                ReadPointUndecodeCompactionPerformer.writeWithPages(
-                        compactionWriter, pageData, device, taskId, false);
-                compactionWriter.endMeasurement(taskId);
+                if(pageData.size()>1) {
+                    ReadPointUndecodeCompactionPerformer.writeWithPages(
+                            compactionWriter, pageData, device, taskId, false);
+                    compactionWriter.endMeasurement(taskId);
+                }
+                else {
+                    System.out.println("no overlapped data, skip undecode performer");
+                }
             }
         }
         return null;

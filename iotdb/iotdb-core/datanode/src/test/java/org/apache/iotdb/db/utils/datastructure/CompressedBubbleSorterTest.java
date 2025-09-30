@@ -429,21 +429,21 @@ public class CompressedBubbleSorterTest {
     }
 
     public void prepareData(long[] times, long[] values) {
-        //samsung dataset
-        readCSV("D:/senior/DQ/research/compressed_sort_paper/dataset/real/samsung/s-10_cleaned_new.csv", 2, ROW_NUM+1, 0, times);
-        readCSV("D:/senior/DQ/research/compressed_sort_paper/dataset/real/samsung/s-10_cleaned_new.csv", 2, ROW_NUM+1, 1, values);
+        //samsung dataset, absolute path: D:/senior/DQ/research/compressed_sort_paper/dataset/real/samsung/s-10_cleaned_new.csv
+        readCSV("../../../datasets/samsung.csv", 2, ROW_NUM+1, 0, times);
+        readCSV("../../../datasets/samsung.csv", 2, ROW_NUM+1, 1, values);
 
-        //artificial dataset
-        //readCSV("D:/senior/DQ/research/compressed_sort_paper/dataset/artificial/exponential/exponential_1_1000_new_new.csv", 2, ROW_NUM+1, 0, times);
-        //readCSV("D:/senior/DQ/research/compressed_sort_paper/dataset/artificial/exponential/exponential_1_1000_new_new.csv", 2, ROW_NUM+1, 1, values);
+        //artificial dataset, absolute path: D:/senior/DQ/research/compressed_sort_paper/dataset/artificial/exponential/exponential_1_1000_new_new.csv
+        //readCSV("../../../datasets/exp.csv", 2, ROW_NUM+1, 0, times);
+        //readCSV("../../../datasets/exp.csv", 2, ROW_NUM+1, 1, values);
 
         //carnet dataset
         //readCSV("D:/senior/DQ/research/compressed_sort_paper/dataset/real/swzl/swzl_clean.csv", 2, ROW_NUM+1, 0, times);
         //readCSV("D:/senior/DQ/research/compressed_sort_paper/dataset/real/swzl/swzl_clean.csv", 2, ROW_NUM+1, 1, values);
 
-        //shipnet dataset
-        //readCSV("D:/senior/DQ/research/compressed_sort_paper/dataset/real/ship/shipNet.csv", 2, ROW_NUM+1, 1, times);
-        //readCSV("D:/senior/DQ/research/compressed_sort_paper/dataset/real/ship/shipNet.csv", 2, ROW_NUM+1, 4, values);
+        //shipnet dataset, absolute path: D:/senior/DQ/research/compressed_sort_paper/dataset/real/ship/shipNet.csv
+        //readCSV("../../../datasets/shipNet.csv", 2, ROW_NUM+1, 1, times);
+        //readCSV("../../../datasets/shipNet.csv", 2, ROW_NUM+1, 4, values);
     }
 
     public void recordMemory(MemoryMXBean memoryMXBean) {
@@ -486,7 +486,7 @@ public class CompressedBubbleSorterTest {
     }
 
     public void writeDataToTXT(long[] data) {
-        String filePath = "D:\\senior\\DQ\\research\\compressed_sort\\test\\memtable_sort_memory.txt";
+        String filePath = "../../../datasets/testData/CompressedBubbleTest/memtable_sort_memory.txt";
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
             for (long number : data) {
                 writer.write(number + ",");

@@ -29,7 +29,7 @@ import java.util.LinkedList;
 import static org.junit.Assert.assertEquals;
 
 public class CompressedMergeSorterTest {
-    private String filePath = "D:\\senior\\DQ\\research\\compressed_sort\\test\\compaction_time.txt";
+    private String filePath = "../../../datasets/testData/CompressedMergeTest/compaction_time.txt";
     private static int ROW_NUM = 1000200;
     private static int PAGE_SIZE =500000;
     private static int ENCODE_TYPE = 0;   //0->TS_2DIFF    1->Chimp   2->Sprintz
@@ -225,14 +225,14 @@ public class CompressedMergeSorterTest {
             pageData1 = getPageData(PAGE_SIZE, timesPage1, valuesPage1);
             pageData2 = getPageData(PAGE_SIZE, timesPage2, valuesPage2);
 
-            try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("D:\\senior\\DQ\\research\\compressed_sort\\test\\pagedata1"))) {
+            try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("../../../datasets/testData/CompressedMergeTest/pagedata1"))) {
                 out.writeObject(pageData1);
                 System.out.println("Object serialized successfully.");
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("D:\\senior\\DQ\\research\\compressed_sort\\test\\pagedata2"))) {
+            try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("../../../datasets/testData/CompressedMergeTest/pagedata2"))) {
                 out.writeObject(pageData2);
                 System.out.println("Object serialized successfully.");
             } catch (IOException e) {
@@ -247,7 +247,7 @@ public class CompressedMergeSorterTest {
         MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
         CompressedSeriesData pageData1 = null;
         CompressedSeriesData pageData2 = null;
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("D:\\senior\\DQ\\research\\compressed_sort\\test\\pagedata1"))) {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("../../../datasets/testData/CompressedMergeTest/pagedata1"))) {
             pageData1 = (CompressedSeriesData)in.readObject();
             in.close();
             System.gc();
@@ -256,7 +256,7 @@ public class CompressedMergeSorterTest {
             return;
         }
 
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("D:\\senior\\DQ\\research\\compressed_sort\\test\\pagedata2"))) {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("../../../datasets/testData/CompressedMergeTest/pagedata2"))) {
             pageData2 = (CompressedSeriesData) in.readObject();
             in.close();
             System.gc();
@@ -327,20 +327,20 @@ public class CompressedMergeSorterTest {
                 valuesPage1 = valuesPage2;
                 valuesPage2 = valuePageTemp;
             }
-            ByteBuffer timeBuffer1TS_2DIFF = getByteBuffer("D:\\senior\\DQ\\research\\compressed_sort\\test\\timebuffer1.bat", PAGE_SIZE, timesPage1, ENCODE_TYPE);
-            ByteBuffer timeBuffer2TS_2DIFF = getByteBuffer("D:\\senior\\DQ\\research\\compressed_sort\\test\\timebuffer2.bat", PAGE_SIZE, timesPage2, ENCODE_TYPE);
-            ByteBuffer valueBuffer1TS_2DIFF = getByteBuffer("D:\\senior\\DQ\\research\\compressed_sort\\test\\valuebuffer1.bat", PAGE_SIZE, valuesPage1, ENCODE_TYPE);
-            ByteBuffer valueBuffer2TS_2DIFF = getByteBuffer("D:\\senior\\DQ\\research\\compressed_sort\\test\\valuebuffer2.bat",PAGE_SIZE, valuesPage2, ENCODE_TYPE);
+            ByteBuffer timeBuffer1TS_2DIFF = getByteBuffer("../../../datasets/testData/CompressedMergeTest/timebuffer1.bat", PAGE_SIZE, timesPage1, ENCODE_TYPE);
+            ByteBuffer timeBuffer2TS_2DIFF = getByteBuffer("../../../datasets/testData/CompressedMergeTest/timebuffer2.bat", PAGE_SIZE, timesPage2, ENCODE_TYPE);
+            ByteBuffer valueBuffer1TS_2DIFF = getByteBuffer("../../../datasets/testData/CompressedMergeTest/valuebuffer1.bat", PAGE_SIZE, valuesPage1, ENCODE_TYPE);
+            ByteBuffer valueBuffer2TS_2DIFF = getByteBuffer("../../../datasets/testData/CompressedMergeTest/valuebuffer2.bat",PAGE_SIZE, valuesPage2, ENCODE_TYPE);
             return;
         }
     }
     @Test
     public void testOldMemory() throws Exception {
         MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
-        ByteBuffer timeBuffer1TS_2DIFF = getByteBuffer("D:\\senior\\DQ\\research\\compressed_sort\\test\\timebuffer1.bat");
-        ByteBuffer timeBuffer2TS_2DIFF = getByteBuffer("D:\\senior\\DQ\\research\\compressed_sort\\test\\timebuffer2.bat");
-        ByteBuffer valueBuffer1TS_2DIFF = getByteBuffer("D:\\senior\\DQ\\research\\compressed_sort\\test\\valuebuffer1.bat");
-        ByteBuffer valueBuffer2TS_2DIFF = getByteBuffer("D:\\senior\\DQ\\research\\compressed_sort\\test\\valuebuffer2.bat");
+        ByteBuffer timeBuffer1TS_2DIFF = getByteBuffer("../../../datasets/testData/CompressedMergeTest/timebuffer1.bat");
+        ByteBuffer timeBuffer2TS_2DIFF = getByteBuffer("../../../datasets/testData/CompressedMergeTest/timebuffer2.bat");
+        ByteBuffer valueBuffer1TS_2DIFF = getByteBuffer("../../../datasets/testData/CompressedMergeTest/valuebuffer1.bat");
+        ByteBuffer valueBuffer2TS_2DIFF = getByteBuffer("../../../datasets/testData/CompressedMergeTest/valuebuffer2.bat");
         System.gc();
         recordMemory(memoryMXBean);
         CompactionPage(memoryMXBean, timeBuffer1TS_2DIFF, valueBuffer1TS_2DIFF, timeBuffer2TS_2DIFF, valueBuffer2TS_2DIFF, ENCODE_TYPE);
@@ -655,21 +655,21 @@ public class CompressedMergeSorterTest {
     }
 
     public void prepareData(long[] times, long[] values) {
-        //samsung dataset
-        readCSV("D:/senior/DQ/research/compressed_sort_paper/dataset/real/samsung/s-10_cleaned_new.csv", 2, ROW_NUM+1, 0, times);
-        readCSV("D:/senior/DQ/research/compressed_sort_paper/dataset/real/samsung/s-10_cleaned_new.csv", 2, ROW_NUM+1, 1, values);
+        //samsung dataset, absolute path: D:/senior/DQ/research/compressed_sort_paper/dataset/real/samsung/s-10_cleaned_new.csv
+        readCSV("../../../datasets/samsung.csv", 2, ROW_NUM+1, 0, times);
+        readCSV("../../../datasets/samsung.csv", 2, ROW_NUM+1, 1, values);
 
-        //artificial dataset
-        //readCSV("D:/senior/DQ/research/compressed_sort_paper/dataset/artificial/exponential/exponential_1_1000_new_new.csv", 2, ROW_NUM+1, 0, times);
-        //readCSV("D:/senior/DQ/research/compressed_sort_paper/dataset/artificial/exponential/exponential_1_1000_new_new.csv", 2, ROW_NUM+1, 1, values);
+        //artificial dataset, absolute path: D:/senior/DQ/research/compressed_sort_paper/dataset/artificial/exponential/exponential_1_1000_new_new.csv
+        //readCSV("../../../datasets/exp.csv", 2, ROW_NUM+1, 0, times);
+        //readCSV("../../../datasets/exp.csv", 2, ROW_NUM+1, 1, values);
 
         //carnet dataset
         //readCSV("D:/senior/DQ/research/compressed_sort_paper/dataset/real/swzl/swzl_clean.csv", 2, ROW_NUM+1, 0, times);
         //readCSV("D:/senior/DQ/research/compressed_sort_paper/dataset/real/swzl/swzl_clean.csv", 2, ROW_NUM+1, 1, values);
 
-        //shipnet dataset
-        //readCSV("D:/senior/DQ/research/compressed_sort_paper/dataset/real/ship/shipNet.csv", 2, ROW_NUM+1, 1, times);
-        //readCSV("D:/senior/DQ/research/compressed_sort_paper/dataset/real/ship/shipNet.csv", 2, ROW_NUM+1, 4, values);
+        //shipnet dataset, absolute path: D:/senior/DQ/research/compressed_sort_paper/dataset/real/ship/shipNet.csv
+        //readCSV("../../../datasets/shipNet.csv", 2, ROW_NUM+1, 1, times);
+        //readCSV("../../../datasets/shipNet.csv", 2, ROW_NUM+1, 4, values);
     }
 
     public boolean readCSV(String filePath, int line_begin, int line_end, int col, long[] data) {

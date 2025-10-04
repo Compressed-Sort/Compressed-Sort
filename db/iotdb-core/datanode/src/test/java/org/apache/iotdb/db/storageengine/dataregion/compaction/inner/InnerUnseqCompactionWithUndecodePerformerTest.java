@@ -1,6 +1,7 @@
 package org.apache.iotdb.db.storageengine.dataregion.compaction.inner;
 
 import org.apache.iotdb.db.storageengine.dataregion.compaction.execute.performer.ICompactionPerformer;
+import org.apache.iotdb.db.storageengine.dataregion.compaction.execute.performer.impl.ReadPointCompactionPerformer;
 import org.apache.iotdb.db.storageengine.dataregion.compaction.execute.performer.impl.ReadPointUndecodeCompactionPerformer;
 import org.apache.iotdb.db.storageengine.dataregion.compaction.execute.task.CompactionTaskSummary;
 import org.apache.iotdb.db.storageengine.dataregion.compaction.execute.utils.CompactionUtils;
@@ -52,7 +53,8 @@ public class InnerUnseqCompactionWithUndecodePerformerTest {
     }
 
     @Test
-    public void sortOneMeasurementWithoutFilterTest() throws Exception {
+    public void mergeWithoutDecodeTest() throws Exception {
+        // undecode compaction test
         inputResource1.setSeq(false);
         inputResource1.setStatusForTest(TsFileResourceStatus.NORMAL);
         inputResource1.updatePlanIndexes((long) 100);
@@ -80,7 +82,47 @@ public class InnerUnseqCompactionWithUndecodePerformerTest {
         System.out.println("TsFile2总计: " + count2 + " 条数据");
         sortTimeWithValue(originalTimes, originalValues);
         int countTotal = getDataFromTsFile(targetTsFileResource, mergedTimes, mergedValues);
-        System.out.println("合并后总计: " + countTotal + " 条数据");
+        System.out.println("undecode合并后总计: " + countTotal + " 条数据");
+        for(int i = 0; i < countTotal; i++) {
+            boolean equal = originalTimes.get(i).equals(mergedTimes.get(i))
+                    && originalValues.get(i).equals(mergedValues.get(i));
+            assert equal : "数据不一致, 出错位置: " + i
+                    + "\n原始数据: " + originalTimes.get(i) + " , " + originalValues.get(i)
+                    + "\n合并数据: " + mergedTimes.get(i) + " , " + mergedValues.get(i);
+        }
+    }
+
+    @Test
+    public void mergeWithDecodeTest() throws Exception {
+        // decode compaction test
+        inputResource1.setSeq(false);
+        inputResource1.setStatusForTest(TsFileResourceStatus.NORMAL);
+        inputResource1.updatePlanIndexes((long) 100);
+
+        inputResource2.setSeq(false);
+        inputResource2.setStatusForTest(TsFileResourceStatus.NORMAL);
+        inputResource2.updatePlanIndexes((long) 100);
+        toMergeResources.add(inputResource1);
+        toMergeResources.add(inputResource2);
+        TsFileResource targetTsFileResource = TsFileNameGenerator.getInnerCompactionTargetFileResource(toMergeResources, false);
+
+        ICompactionPerformer performer =
+                new ReadPointCompactionPerformer(
+                        Collections.emptyList(),
+                        toMergeResources,
+                        Collections.singletonList(targetTsFileResource));
+        performer.setSummary(new CompactionTaskSummary());
+        performer.perform();
+        CompactionUtils.moveTargetFile(
+                Collections.singletonList(targetTsFileResource), true, COMPACTION_TEST_SG);
+        CompactionUtils.combineModsInInnerCompaction(toMergeResources, targetTsFileResource);
+        int count1 = getDataFromTsFile(inputResource1, originalTimes, originalValues);
+        System.out.println("TsFile1总计: " + count1 + " 条数据");
+        int count2 = getDataFromTsFile(inputResource2, originalTimes, originalValues);
+        System.out.println("TsFile2总计: " + count2 + " 条数据");
+        sortTimeWithValue(originalTimes, originalValues);
+        int countTotal = getDataFromTsFile(targetTsFileResource, mergedTimes, mergedValues);
+        System.out.println("decode合并后总计: " + countTotal + " 条数据");
         for(int i = 0; i < countTotal; i++) {
             boolean equal = originalTimes.get(i).equals(mergedTimes.get(i))
                     && originalValues.get(i).equals(mergedValues.get(i));
